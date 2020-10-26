@@ -2,6 +2,12 @@
   "name": "cocktails",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -12,11 +18,11 @@
     "tailwindcss": "^1.9.6",
     "web-vitals": "^0.2.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "postcss-cli": "^8.1.0",
+    "postcss-nested": "^5.0.1",
+    "postcss-import": "^13.0.0"
   },
   "eslintConfig": {
     "extends": [
@@ -35,11 +41,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "autoprefixer": "^10.0.1",
-    "postcss-cli": "^8.1.0",
-    "postcss-nested": "^5.0.1",
-    "postcss-import": "^13.0.0"
   }
 }
