@@ -1,9 +1,9 @@
 import { types } from './cocktails.actions';
 
 export const initialState = {
-  pending: false,
   cocktail: null,
-  error: null
+  error: null,
+  pending: false,
 };
 
 export default function reducer(state, action) {
