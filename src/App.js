@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { formatCocktail } from './utils';
+import React, { useEffect, useMemo, useReducer, useState } from 'react';
+
+import { fetchCocktail } from './domain/cocktails.services';
+import { default as CocktailReducer, initialState } from './domain/cocktails.reducer';
+
 import CocktailCard from './components/CocktailCard';
 
 function App() {
-  const TOTAL_DRINKS = 604;
-
-  const [cocktail, setCocktail] = useState(null);
+  const [state, dispatch] = useReducer(CocktailReducer, initialState);
   const [likedCocktailsIds, setLikedCocktailsIds] = useState([]);
   const [skippedCocktailsIds, setSkippedCocktailsIds] = useState([]);
 
@@ -17,40 +18,22 @@ function App() {
     setSkippedCocktailsIds(skippedCocktailsIds => [...skippedCocktailsIds, cocktailId]);
   };
 
-  const viewedCocktails = useMemo(() => {
+  const viewedCocktailsIds = useMemo(() => {
     return likedCocktailsIds.concat(skippedCocktailsIds);
   }, [likedCocktailsIds, skippedCocktailsIds]);
 
-  const hasViewedAllCocktails = useMemo(() => {
-    return viewedCocktails.length >= TOTAL_DRINKS;
-  }, [viewedCocktails]);
-
-  const fetchCocktail = useCallback(() => {
-    return fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
-      .then(response => response.json())
-      .then(data => {
-        if (!hasViewedAllCocktails) {
-          if (viewedCocktails.includes(data.drinks[0].idDrink)) {
-            return fetchCocktail();
-          } else {
-            setCocktail(formatCocktail(data.drinks[0]));
-          }
-        }
-      });
-  }, [viewedCocktails]);
-
   useEffect(() => {
-    fetchCocktail();
-  }, [viewedCocktails]);
+    fetchCocktail(dispatch, viewedCocktailsIds);
+  }, [viewedCocktailsIds]);
 
   return (
     <div>
-      {cocktail &&
       <CocktailCard
-        cocktail={cocktail}
+        cocktail={state.cocktail}
+        isLoading={state.pending}
         onLike={likeCocktail}
         onSkip={skipCocktail}
-      />}
+      />
     </div>
   );
 

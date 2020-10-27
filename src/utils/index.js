@@ -1,4 +1,4 @@
-function formatCocktail(data) {
+export function formatCocktail(data) {
   let ingredients = [];
 
   let i = 1;
@@ -20,5 +20,3 @@ function formatCocktail(data) {
     thumbnail: data['strDrinkThumb']
   };
 }
-
-export { formatCocktail };
