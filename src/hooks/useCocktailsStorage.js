@@ -1,5 +1,4 @@
-import { useReducer, useState } from 'react';
-import { likeCocktail, skipCocktail } from '../domain/cocktails.actions';
+import { useReducer } from 'react';
 import { default as CocktailReducer, initialState } from '../domain/cocktails.reducer';
 
 export function useCocktailsStorage({ key, action }, initialValue) {
@@ -15,17 +14,17 @@ export function useCocktailsStorage({ key, action }, initialValue) {
     })()
   });
 
-  const store = cocktail => {
-    if (typeof cocktail === 'function') {
-      cocktail = cocktail(state.cocktail);
+  const store = cocktailId => {
+    if (typeof cocktailId === 'function') {
+      cocktailId = cocktailId(state.cocktail);
     }
 
     try {
       window.localStorage.setItem(key, JSON.stringify([
         ...state[key],
-        cocktail
+        cocktailId
       ]));
-      dispatch(action(cocktail));
+      dispatch(action(cocktailId));
     } catch (error) {
       console.log(error);
     }

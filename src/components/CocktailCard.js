@@ -10,9 +10,13 @@ export default function CocktailCard({ cocktail, isLoading, onLike, onSkip }) {
         : !cocktail ?
           <div>No cocktail</div>
           :
-          <div>
+          <div style={{ display: 'flex' }}>
             <div>
-              <img src={cocktail.thumbnail} alt="" />
+              <img
+                alt=""
+                src={cocktail.thumbnail}
+                style={{ width: '16rem' }}
+              />
             </div>
             <div>
               <div>
@@ -23,13 +27,15 @@ export default function CocktailCard({ cocktail, isLoading, onLike, onSkip }) {
 
               <div>
                 Ingredients:
-                {cocktail.ingredients.map((ingredient, index) => {
-                  return (
-                    <div key={index}>
-                      <div>{ingredient.name}</div>
-                    </div>
-                  );
-                })}
+                <ul>
+                  {cocktail.ingredients.map((ingredient, index) => {
+                    return (
+                      <li key={index}>
+                        {ingredient.name}
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </div>
           </div>}

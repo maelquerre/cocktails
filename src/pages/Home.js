@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
-import { useCocktailsStorage } from '../hooks';
-import { fetchCocktail } from '../domain/cocktails.services';
+import { useParams } from 'react-router-dom';
+
+import { useCocktailsStorage } from '../hooks/useCocktailsStorage';
+import { fetchCocktail, fetchCocktailById } from '../domain/cocktails.services';
 import { likeCocktail, skipCocktail } from '../domain/cocktails.actions';
 import { default as CocktailReducer, initialState } from '../domain/cocktails.reducer';
 
-import CocktailCard from './CocktailCard';
+import CocktailCard from '../components/CocktailCard';
 
 const likeCocktailAction = likeCocktail;
 const skipCocktailAction = skipCocktail;
@@ -12,7 +14,9 @@ const skipCocktailAction = skipCocktail;
 const LIKED_COCKTAILS_IDS_KEY = 'likedCocktailsIds';
 const SKIPPED_COCKTAILS_IDS_KEY = 'skippedCocktailsIds';
 
-function App() {
+export default function Home() {
+  const { id: cocktailId } = useParams();
+
   const [state, dispatch] = useReducer(CocktailReducer, initialState);
 
   const [likedCocktailsIds, likeCocktail] = useCocktailsStorage({
@@ -30,7 +34,9 @@ function App() {
   }, [likedCocktailsIds, skippedCocktailsIds]);
 
   useEffect(() => {
-    fetchCocktail(dispatch, viewedCocktailsIds);
+    cocktailId
+      ? fetchCocktailById(dispatch, viewedCocktailsIds, cocktailId).catch(() => {})
+      : fetchCocktail(dispatch, viewedCocktailsIds).catch(() => {});
   }, [viewedCocktailsIds]);
 
   return (
@@ -44,5 +50,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

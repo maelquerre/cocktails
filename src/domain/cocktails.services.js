@@ -23,4 +23,15 @@ export function fetchCocktail(dispatch, viewedCocktailsIds) {
     .catch(error => dispatch(fetchCocktailError(error)));
 }
 
+export function fetchCocktailById(dispatch, viewedCocktailsIds, cocktailId) {
+  dispatch(fetchCocktailPending());
+
+  return fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${cocktailId}`)
+    .then(response => response.json())
+    .then(data => {
+      dispatch(fetchCocktailSuccess(formatCocktail(data.drinks[0])));
+    })
+    .catch(error => dispatch(fetchCocktailError(error)));
+}
+
 
