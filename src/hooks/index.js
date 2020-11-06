@@ -1,28 +1,35 @@
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
+import { likeCocktail, skipCocktail } from '../domain/cocktails.actions';
+import { default as CocktailReducer, initialState } from '../domain/cocktails.reducer';
 
-export function useLocalStorage(key, initialValue) {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      return initialValue;
-    }
+export function useCocktailsStorage({ key, action }, initialValue) {
+  const [state, dispatch] = useReducer(CocktailReducer, {
+    ...initialState,
+    [key]: (() => {
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : initialValue;
+      } catch (error) {
+        return initialValue;
+      }
+    })()
   });
 
-  const setValue = value => {
+  const store = cocktail => {
+    if (typeof cocktail === 'function') {
+      cocktail = cocktail(state.cocktail);
+    }
+
     try {
-      setStoredValue(value);
-
-      if (typeof value === 'function') {
-        value = value(storedValue);
-      }
-
-      window.localStorage.setItem(key, JSON.stringify(value));
+      window.localStorage.setItem(key, JSON.stringify([
+        ...state[key],
+        cocktail
+      ]));
+      dispatch(action(cocktail));
     } catch (error) {
       console.log(error);
     }
   };
 
-  return [storedValue, setValue];
+  return [state[key], store];
 }
