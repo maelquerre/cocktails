@@ -1,0 +1,12 @@
+const StatusCodes = {
+  BAD_REQUEST: 400,
+  CONFLICT: 409,
+  CREATED: 201,
+  FORBIDDEN: 403,
+  INTERNAL_SERVER_ERROR: 500,
+  OK: 200,
+  NOT_FOUND: 404,
+  UNAUTHORIZED: 401,
+};
+
+export default StatusCodes;
