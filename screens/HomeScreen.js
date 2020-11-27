@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
+
+import CocktailCard from '../components/CocktailCard'
 
 export default function HomeScreen() {
   const [cocktail, setCocktail] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    fetch('http://192.168.1.76:8000/api/cocktail')
+  const fetchCocktail = () => {
+    setIsLoading(true)
+    return fetch('http://192.168.1.76:8000/api/cocktail')
       .then(res => res.json())
       .then(cocktail => {
         setCocktail(cocktail)
-      })
+        setIsLoading(false)
+      }).catch(() => setIsLoading(false))
+  }
+
+  useEffect(() => {
+    fetchCocktail()
   }, [])
 
   return (
     <View style={styles.container}>
-      <Text>{cocktail ? cocktail.strDrink : 'No cocktail :('}</Text>
+      {cocktail
+        ? <CocktailCard
+          cocktail={cocktail}
+          isLoading={isLoading}
+          onSkip={fetchCocktail}
+        />
+        : <Text>No cocktail :(</Text>}
     </View>
   )
 }

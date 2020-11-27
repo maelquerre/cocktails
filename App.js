@@ -3,21 +3,32 @@ import 'react-native-gesture-handler'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
+import FavoritesScreen from './screens/FavoritesScreen'
 import HomeScreen from './screens/HomeScreen'
 
-const Stack = createStackNavigator()
+const Tab = createBottomTabNavigator()
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+      <Tab.Navigator>
+        <Tab.Screen
           name="Home"
           component={HomeScreen}
+          options={{
+            tabBarLabel: 'Cocktail',
+          }}
         />
-      </Stack.Navigator>
+        <Tab.Screen
+          name="Favorites"
+          component={FavoritesScreen}
+          options={{
+            tabBarLabel: 'Favorites',
+          }}
+        />
+      </Tab.Navigator>
 
       <StatusBar style="auto" />
     </NavigationContainer>
